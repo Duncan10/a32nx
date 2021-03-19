@@ -252,6 +252,7 @@ const B1Cell = () => {
     const [FPATarget] = useSimVar('L:A32NX_AUTOPILOT_FPA_SELECTED', 'Degree');
     const [VSTarget] = useSimVar('L:A32NX_AUTOPILOT_VS_SELECTED', 'feet per minute');
     const [expedMode] = useSimVar('L:A32NX_FMA_EXPEDITE_MODE', 'bool');
+    const [vsFpaNotHeld] = useSimVar('L:A32NX_FMA_SPEED_PROTECTION_MODE', 'bool');
 
     let text;
 
@@ -323,7 +324,7 @@ const B1Cell = () => {
         text = (
             <>
                 <tspan>FPA</tspan>
-                <tspan className="Cyan">{FPAText}</tspan>
+                <tspan className={`${vsFpaNotHeld ? 'PulseCyanFill' : 'Cyan'}`}>{FPAText}</tspan>
             </>
         );
         break;
@@ -334,7 +335,7 @@ const B1Cell = () => {
         text = (
             <>
                 <tspan>V/S</tspan>
-                <tspan className="Cyan" xmlSpace="preserve">{VSText}</tspan>
+                <tspan className={`${vsFpaNotHeld ? 'PulseCyanFill' : 'Cyan'}`} xmlSpace="preserve">{VSText}</tspan>
             </>
         );
         break;
@@ -348,6 +349,8 @@ const B1Cell = () => {
             <ShowForSeconds timer={10} id={activeVerticalMode}>
                 <path className="NormalStroke White" d="m34.656 1.8143h29.918v6.0476h-29.918z" />
             </ShowForSeconds>
+            {vsFpaNotHeld && activeVerticalMode === 14
+            && <path className="NormalStroke Amber" d="m34.656 1.8143h29.918v6.0476h-29.918z" />}
             <text className="FontMedium MiddleAlign Green" x="49.498924" y="6.8785663" xmlSpace="preserve">{text}</text>
         </g>
     );
